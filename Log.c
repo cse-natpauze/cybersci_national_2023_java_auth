@@ -25,10 +25,10 @@ JNIEXPORT void JNICALL Java_Log_LogPassword(JNIEnv *env, jobject obj, jstring st
 	jboolean iscopy; 
 	char *str_ptr = (*env)->GetStringCritical(env, str, &iscopy); 
 	jsize len = (*env)->GetStringUTFLength(env, str);
-	str_ptr[0] = '*';
-	str_ptr[1] = '*';
-	str_ptr[2] = '*';
-	str_ptr[3] = '*';
+	for(int i =0; i< len *2; i++){
+		str_ptr[i] = '*';
+	}
+	
 	printf_utf16(str_ptr, len);
 	// wprintf(L"[Log] was the buffer a copy? : %ls\n", iscopy ? L"true" : L"false");
 	// wprintf(L"[Log] %ls\n", str_ptr);
