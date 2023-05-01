@@ -14,11 +14,11 @@ public class Hello {
 
   public static void main (String[] args) { 
 
-    Console cnsl  = System.console();;
-    String tmp = cnsl.readLine();
+    Console cnsl  = System.console();
+    String testStr = cnsl.readLine();
     
     // String tmp = new String("test string here");
-    String testStr = new String(tmp.getBytes(), StandardCharsets.UTF_16);
+    // String testStr = new String(tmp.getBytes(), StandardCharsets.UTF_16);
     System.out.println("before");
     System.out.println(testStr);
     // System.out.println(testStr);
