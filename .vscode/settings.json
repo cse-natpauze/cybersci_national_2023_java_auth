@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "hello.h": "c",
+        "jni.h": "c"
+    },
+    "C_Cpp.default.includePath": [
+        "/usr/lib/jvm/java-17-openjdk-amd64/include/*",
+        "/usr/lib/jvm/java-17-openjdk-amd64/include/linux/*"
+    ]
+}
