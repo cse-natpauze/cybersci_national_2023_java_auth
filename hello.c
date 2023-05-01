@@ -10,3 +10,17 @@ JNIEXPORT void JNICALL Java_Hello_sayHi (JNIEnv *env, jobject obj, jstring who, 
 		printf("Hello %s\n", name);
 	}
 }
+
+
+JNIEXPORT void JNICALL Java_Hello_stringSanitize(JNIEnv *env, jobject obj, jstring str){
+
+	jboolean iscopy; 
+	char *str_ptr;
+	str_ptr = (*env)->GetStringCritical(env, str, &iscopy); 
+	str_ptr[0] = 'A';
+	str_ptr[1] = 'A';
+	str_ptr[2] = 'A';
+	str_ptr[3] = 'A';
+	printf("[native] was the buffer a copy? : %s\n", iscopy ? "true" : "false");
+	printf("[native] %s\n", str_ptr);
+}
