@@ -18,7 +18,7 @@ public class Hello {
     String tmp = cnsl.readLine();
     
     // String tmp = new String("test string here");
-    String testStr = new String(tmp.getBytes(), StandardCharsets.ISO_8859_1);
+    String testStr = new String(tmp.getBytes(), StandardCharsets.UTF_16);
     System.out.println("before");
     System.out.println(testStr);
     // System.out.println(testStr);
