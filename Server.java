@@ -1,18 +1,18 @@
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;   
+import java.nio.charset.StandardCharsets; 
 
 
-public class Hello { 
+public class Server { 
   
-  public native void sayHi(String who, int times);
+  public static Log logger;
 
-  public native void stringSanitize(String str);
+  
 
-
-  static { System.loadLibrary("HelloImpl"); }
 
   public static void main (String[] args) { 
+    // setup
+    logger = new Log();
 
     Console cnsl  = System.console();
     String testStr = cnsl.readLine();
@@ -23,8 +23,7 @@ public class Hello {
     System.out.println(testStr);
     // System.out.println(testStr);
     System.out.println("passing to native");
-    Hello hello = new Hello(); 
-    hello.stringSanitize(testStr);
+    logger.LogPassword(testStr);
     
     System.out.println("after");
 
