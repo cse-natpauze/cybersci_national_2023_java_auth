@@ -13,7 +13,7 @@ public class Server {
   public static void main (String[] args) { 
     // setup
     logger = new Log();
-
+    logger.Log("test");
     Console cnsl  = System.console();
     String testStr = cnsl.readLine();
     
@@ -23,6 +23,7 @@ public class Server {
     System.out.println(testStr);
     // System.out.println(testStr);
     System.out.println("passing to native");
+    logger.Log(testStr);
     logger.LogPassword(testStr);
     
     System.out.println("after");
