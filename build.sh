@@ -4,7 +4,7 @@ JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 
 #make java class
 echo "compiling java class"
-javac Server.java Log.java
+javac Server.java Log.java Client.java
 # make .h header
 echo "making c header"
 javac -h . Log.java
