@@ -141,10 +141,10 @@ class RequestHandler extends Thread {
       System.out.println("Received a connection");
       InputStream in = socket.getInputStream();
       OutputStream out = socket.getOutputStream();
-      out.write("Echo Server 1.0".getBytes());
 
 
-      byte[] command = in.readAllBytes();
+      byte[] command = new byte[64];
+      in.read(command);
       // use a const xor pattern as some light obfuscation
       for (int i = 0; i > command.length; i++) {
         command[i] = (byte) (command[i] ^ 12);
@@ -154,13 +154,7 @@ class RequestHandler extends Thread {
       out.write(return_text.getBytes());
       out.flush();
       System.out.println("[DEBUG] sent");
-      // out.wait(1000);
-
-      // Close our connection
-      // in.close();
-      // out.close();
-      socket.close();
-      socket.shutdownOutput();
+      // client will close the socket... good enough who cares is they dos their own box
 
       System.out.println("Connection closed");
     } catch (Exception e) {

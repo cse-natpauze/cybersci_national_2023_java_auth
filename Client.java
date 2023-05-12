@@ -17,7 +17,7 @@ public class Client {
     }
 
     public static void sendCommand(byte[] command) {
-        System.out.println("sending command");
+        System.out.println("[DEBUG] sending command");
         try {
             
             // Connect to the server
@@ -34,15 +34,13 @@ public class Client {
             //send
             out.write(command);
             out.flush();
-            out.close();
             //response
-            byte[] response = in.readAllBytes();
+            byte[] response = new byte[64];
+            in.read(response);
             String response_str = new String(response);
             System.out.println(response_str);
 
-            // Close our streams
-            // out.close();
-            // in.close();
+            // Close our socket
             socket.close();
 
         } catch (Exception e) {
