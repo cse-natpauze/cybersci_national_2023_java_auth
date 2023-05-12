@@ -44,6 +44,9 @@ public class Client {
     }
 
     public static void login(String user, String password) {
+        if(user.indexOf(':', 0) != -1){
+            return;
+        }
         // System.out.println(
         String auth_str = user+":"+password;
         byte[] auth_bytes = auth_str.getBytes();
@@ -51,6 +54,28 @@ public class Client {
         byte[] command = joinByteArray(t, auth_bytes);
         sendCommand(command);
     }
+    public static void dumpSecret(String user, String password) {
+        if(user.indexOf(':', 0) != -1){
+            return;
+        }
+        // System.out.println(
+        String auth_str = user+":"+password;
+        byte[] auth_bytes = auth_str.getBytes();
+        byte[] t = {0x17};
+        byte[] command = joinByteArray(t, auth_bytes);
+        sendCommand(command);
+    }
+
+    // public static void provisionAccount(String user) {
+    //     if(user.indexOf(':', 0) != -1){
+    //         return;
+    //     }
+    //     // System.out.println(
+    //     byte[] user_b = user.getBytes();
+    //     byte[] t = {0x4a};
+    //     byte[] command = joinByteArray(t, user_b);
+    //     sendCommand(command);
+    // }
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -65,6 +90,13 @@ public class Client {
         console.printf("Select your action:\n\tLOGIN\n\tDUMPSECRET\n");
         String input = console.readLine();
         if (input.equals("LOGIN")) {
+            console.printf("user:");
+            String username = console.readLine();
+            console.printf("password:");
+            String password = console.readLine();
+            login(username, password);
+        }
+        if (input.equals("DUMPSECRET")) {
             console.printf("user:");
             String username = console.readLine();
             console.printf("password:");

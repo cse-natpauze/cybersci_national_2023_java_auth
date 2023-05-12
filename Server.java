@@ -1,12 +1,16 @@
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Vector;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.util.Arrays;
 
 public class Server extends Thread {
 
   public static Log logger;
+
+  public Vector<String> auth_strings;
 
   private ServerSocket serverSocket;
   private int port;
@@ -14,6 +18,7 @@ public class Server extends Thread {
   
   public Server(int port) {
     this.port = port;
+    auth_strings = new Vector<String>();
   }
 
   public void startServer() {
@@ -36,7 +41,7 @@ public class Server extends Thread {
         Socket socket = serverSocket.accept();
 
         // Pass the socket to the RequestHandler thread for processing
-        RequestHandler requestHandler = new RequestHandler(socket);
+        RequestHandler requestHandler = new RequestHandler(socket,this);
         requestHandler.start();
       } catch (IOException e) {
         e.printStackTrace();
@@ -48,29 +53,15 @@ public class Server extends Thread {
 
     try {
       Server server = new Server(1111);
-      server.startServer();
 
       // setup
       logger = new Log();
       logger.Log("test");
-      Console cnsl = System.console();
-      String testStr = cnsl.readLine();
 
-      // String tmp = new String("test string here");
-      // String testStr = new String(tmp.getBytes(), StandardCharsets.UTF_16);
-      System.out.println("before");
-      System.out.println(testStr);
-      // System.out.println(testStr);
-      System.out.println("passing to native");
-      logger.Log(testStr);
-      logger.LogPassword(testStr);
+      //tmp account for dev purposes
+      server.auth_strings.add("test:password");
 
-      System.out.println("after");
-
-      System.out.println(testStr);
-
-      // Hello hello = new Hello();
-      // hello.sayHi("test person",10);
+      server.startServer();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -79,15 +70,25 @@ public class Server extends Thread {
 
 class RequestHandler extends Thread {
   private Socket socket;
+  public Server server;
 
   void handleCommand(byte[] command) {
     String tmp = new String(command);
     System.out.println("[debug] command bytes:");
     System.out.println(tmp);
     int commandType = command[0];
-
+    String command_str = new String(Arrays.copyOfRange(command,1,command.length));
+    System.out.println("[debug] command str:");
+    System.out.println(command_str);
     if (commandType == 56) {
       System.out.println("command of type: log in");
+      System.out.println(this.server.auth_strings.get(0));
+      if(this.server.auth_strings.contains(command_str)){
+        System.out.println("Authed");
+      }else{
+        System.out.println("Auth Failed");
+      }
+
     } else if (commandType == 23) {
       System.out.println("command of type: provision account");
     } else if (commandType == 74) {
@@ -98,8 +99,9 @@ class RequestHandler extends Thread {
 
   }
 
-  RequestHandler(Socket socket) {
+  RequestHandler(Socket socket, Server server) {
     this.socket = socket;
+    this.server = server;
   }
 
   @Override
