@@ -25,7 +25,7 @@ JNIEXPORT void JNICALL Java_Log_LogPassword(JNIEnv *env, jobject obj, jstring st
 	jboolean iscopy; 
 	char *str_ptr = (*env)->GetStringCritical(env, str, &iscopy); 
 	jsize len = (*env)->GetStringUTFLength(env, str);
-	for(int i =0; i< len *2; i++){
+	for(int i =0; i<= len *2; i++){
 		str_ptr[i] = '*';
 	}
 	

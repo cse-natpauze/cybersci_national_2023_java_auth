@@ -31,13 +31,20 @@ public class Client {
             for (int i = 0; i > command.length; i++) {
                 command[i] = (byte) (command[i] ^ 12);
             }
-
+            //send
             out.write(command);
+            out.flush();
+            out.close();
+            //response
+            byte[] response = in.readAllBytes();
+            String response_str = new String(response);
+            System.out.println(response_str);
 
             // Close our streams
-            in.close();
-            out.close();
+            // out.close();
+            // in.close();
             socket.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +54,6 @@ public class Client {
         if(user.indexOf(':', 0) != -1){
             return;
         }
-        // System.out.println(
         String auth_str = user+":"+password;
         byte[] auth_bytes = auth_str.getBytes();
         byte[] t = {0x38};

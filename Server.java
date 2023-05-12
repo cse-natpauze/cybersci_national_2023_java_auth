@@ -74,7 +74,7 @@ class RequestHandler extends Thread {
   private Socket socket;
   public Server server;
 
-  void handleCommand(byte[] command) {
+  String handleCommand(byte[] command) {
     String tmp = new String(command);
     System.out.println("[DEBUG] command bytes:");
     System.out.println(tmp);                  //[DEBUG]
@@ -91,9 +91,11 @@ class RequestHandler extends Thread {
       }
       
       if(this.server.auth_strings.contains(command_str)){
-        System.out.println("Authed"); 
+        System.out.println("Authed");  //[DEBUG]
+        return "Authenticated";
       }else{
-        System.out.println("Auth Failed");
+        System.out.println("Auth Failed"); //[DEBUG]
+        return "Authentication failed";
       }
 
     } else if (commandType == 23) {
@@ -110,19 +112,21 @@ class RequestHandler extends Thread {
         char c = (char)('A' + (v%57));
         password = password.concat(String.valueOf(c));
       }
-      System.out.println("new password: " + password);
+      System.out.println("[DEBUG] new password: " + password);
       String auth_string = command_str + ":" + password; 
       
       server.auth_strings.add(auth_string);
-
+      return "Account provisioned, contact an administrator for your temporary password";
 
 
 
     } else if (commandType == 74) {
-      System.out.println("command of type: read secret");
+      System.out.println("[DEBUG] command of type: read secret");
     } else {
-      System.out.println("unknown");
+      // System.out.println("unknown");
+      return "Error";
     }
+    return "Error";
 
   }
 
@@ -145,13 +149,18 @@ class RequestHandler extends Thread {
       for (int i = 0; i > command.length; i++) {
         command[i] = (byte) (command[i] ^ 12);
       }
-      handleCommand(command);
+      String return_text = handleCommand(command);
+      System.out.println("[DEBUG] return_text: " + return_text);
+      out.write(return_text.getBytes());
       out.flush();
+      System.out.println("[DEBUG] sent");
+      // out.wait(1000);
 
       // Close our connection
       // in.close();
       // out.close();
       socket.close();
+      socket.shutdownOutput();
 
       System.out.println("Connection closed");
     } catch (Exception e) {
