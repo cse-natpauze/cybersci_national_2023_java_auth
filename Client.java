@@ -35,7 +35,7 @@ public class Client {
             out.write(command);
             out.flush();
             //response
-            byte[] response = new byte[64];
+            byte[] response = new byte[128];
             in.read(response);
             String response_str = new String(response);
             System.out.println(response_str);
@@ -75,7 +75,7 @@ public class Client {
         }                                                               
         String auth_str = user+":"+password;                            
         byte[] auth_bytes = auth_str.getBytes();                        
-        byte[] t = {0x17};                                              
+        byte[] t = {0x4a};                                              
         byte[] command = joinByteArray(t, auth_bytes);                  
         sendCommand(command);                                           
     }                                                                   
@@ -104,7 +104,7 @@ public class Client {
             String username = console.readLine();
             console.printf("password:");
             String password = console.readLine();
-            login(username, password);
+            dumpSecret(username, password);
         }
         if (input.equals("NEW")) {                      //[DEBUG]
             console.printf("user:");                    //[DEBUG]

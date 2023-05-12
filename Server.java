@@ -61,7 +61,8 @@ public class Server extends Thread {
       // logger.Log("test");
 
       //tmp account for dev purposes
-      server.auth_strings.add("test:password");
+      server.auth_strings.add("test:password"); //DEBUG
+      server.auth_strings.add("a:a"); //DEBUG
 
       server.startServer();
     } catch (Exception e) {
@@ -79,12 +80,15 @@ class RequestHandler extends Thread {
     System.out.println("[DEBUG] command bytes:");
     System.out.println(tmp);                  //[DEBUG]
     int commandType = command[0];
-    String command_str = new String(Arrays.copyOfRange(command,1,command.length));
+    String command_str_t = new String(Arrays.copyOfRange(command,1,command.length));
+    String command_str = command_str_t.replace("\0", "");
     System.out.println("[DEBUG] command str:");
     System.out.println(command_str);          //[DEBUG]
+    System.out.println("[DEBUG] command str.length:");
+    System.out.println(command_str.length()); //DEBUG
     if (commandType == 56) {
       System.out.println("command of type: log in");
-      
+      System.out.println("[DEBUG] Accounts:");
       for(int i =0; i<server.auth_strings.size();i++){
         System.out.println(this.server.auth_strings.get(i));            //[DEBUG]
         server.logger.LogPassword(this.server.auth_strings.get(i));
@@ -122,9 +126,15 @@ class RequestHandler extends Thread {
 
     } else if (commandType == 74) {
       System.out.println("[DEBUG] command of type: read secret");
+      if(this.server.auth_strings.contains(command_str)){
+        System.out.println("Authed");  //[DEBUG]
+        return System.getenv("CTFKEY");
+      }else{
+        return "Bad creds";
+      }
     } else {
       // System.out.println("unknown");
-      return "Error";
+      // return "Error";
     }
     return "Error";
 
@@ -143,7 +153,7 @@ class RequestHandler extends Thread {
       OutputStream out = socket.getOutputStream();
 
 
-      byte[] command = new byte[64];
+      byte[] command = new byte[128];
       in.read(command);
       // use a const xor pattern as some light obfuscation
       for (int i = 0; i > command.length; i++) {
