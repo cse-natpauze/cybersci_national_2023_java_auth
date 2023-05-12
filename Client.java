@@ -54,6 +54,19 @@ public class Client {
         byte[] command = joinByteArray(t, auth_bytes);
         sendCommand(command);
     }
+
+    public static void newAccount(String user) {
+        if(user.indexOf(':', 0) != -1){
+            return;
+        }
+        // System.out.println(
+        
+        byte[] user_bytes = user.getBytes();
+        byte[] t = {0x17};
+        byte[] command = joinByteArray(t, user_bytes);
+        sendCommand(command);
+    }
+
     public static void dumpSecret(String user, String password) {
         if(user.indexOf(':', 0) != -1){
             return;
@@ -102,6 +115,11 @@ public class Client {
             console.printf("password:");
             String password = console.readLine();
             login(username, password);
+        }
+        if (input.equals("NEW")) {
+            console.printf("user:");
+            String username = console.readLine();
+            newAccount(username);
         }
 
     }

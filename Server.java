@@ -5,6 +5,7 @@ import java.util.Vector;
 import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.Arrays;
+import java.security.SecureRandom;
 
 public class Server extends Thread {
 
@@ -82,7 +83,10 @@ class RequestHandler extends Thread {
     System.out.println(command_str);
     if (commandType == 56) {
       System.out.println("command of type: log in");
-      System.out.println(this.server.auth_strings.get(0));
+      for(int i =0; i<server.auth_strings.size();i++){
+        System.out.println(this.server.auth_strings.get(i));
+      }
+      
       if(this.server.auth_strings.contains(command_str)){
         System.out.println("Authed");
       }else{
@@ -91,6 +95,25 @@ class RequestHandler extends Thread {
 
     } else if (commandType == 23) {
       System.out.println("command of type: provision account");
+      System.out.println("provisioning account for user " + command_str);
+      //
+      SecureRandom random = new SecureRandom();
+      byte r_bytes[] = new byte[64];
+      String password = new String("");
+      random.nextBytes(r_bytes);
+      // 
+      for(int i =0; i<r_bytes.length;i++){
+        int v = r_bytes[i] + 128;
+        char c = (char)('A' + (v%57));
+        password = password.concat(String.valueOf(c));
+      }
+      System.out.println("new password: " + password);
+      String auth_string = command_str + ":" + password; 
+      server.auth_strings.add(auth_string);
+
+
+
+
     } else if (commandType == 74) {
       System.out.println("command of type: read secret");
     } else {
