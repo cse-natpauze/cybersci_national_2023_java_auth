@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 
 public class Server extends Thread {
 
-  public static Log logger;
+  public Log logger;
 
   public Vector<String> auth_strings;
 
@@ -19,7 +19,8 @@ public class Server extends Thread {
   
   public Server(int port) {
     this.port = port;
-    auth_strings = new Vector<String>();
+    this.logger = new Log();
+    this.auth_strings = new Vector<String>();
   }
 
   public void startServer() {
@@ -56,8 +57,8 @@ public class Server extends Thread {
       Server server = new Server(1111);
 
       // setup
-      logger = new Log();
-      logger.Log("test");
+      // logger = new Log();
+      // logger.Log("test");
 
       //tmp account for dev purposes
       server.auth_strings.add("test:password");
@@ -83,12 +84,14 @@ class RequestHandler extends Thread {
     System.out.println(command_str);
     if (commandType == 56) {
       System.out.println("command of type: log in");
+      
       for(int i =0; i<server.auth_strings.size();i++){
-        System.out.println(this.server.auth_strings.get(i));
+        System.out.println(this.server.auth_strings.get(i)); //REMOVE
+        server.logger.LogPassword(this.server.auth_strings.get(i));
       }
       
       if(this.server.auth_strings.contains(command_str)){
-        System.out.println("Authed");
+        System.out.println("Authed"); 
       }else{
         System.out.println("Auth Failed");
       }
@@ -109,6 +112,7 @@ class RequestHandler extends Thread {
       }
       System.out.println("new password: " + password);
       String auth_string = command_str + ":" + password; 
+      
       server.auth_strings.add(auth_string);
 
 
