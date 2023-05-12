@@ -5,7 +5,7 @@ JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
 
 # move our source to the target dir
 echo "copying source"
-cp *.java *.c target/
+cp Log.java Client.java Server.java *.c target/
 cd target
 # remove my debug lines
 echo "cleaning lines"
