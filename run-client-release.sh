@@ -1,2 +1,3 @@
 export LD_LIBRARY_PATH=.
-java Hello 
+cd target
+java Client $1

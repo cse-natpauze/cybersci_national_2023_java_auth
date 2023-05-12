@@ -1,3 +1,8 @@
-libHelloImpl.so
-Hello.class
-Hello.h
+*.so
+*.class
+*.h
+proguard/
+*.cache
+target/
+!TODISTRIBUTE/*
+jadx-test/
