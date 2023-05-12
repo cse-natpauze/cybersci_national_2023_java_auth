@@ -55,40 +55,26 @@ public class Client {
         sendCommand(command);
     }
 
-    public static void newAccount(String user) {
-        if(user.indexOf(':', 0) != -1){
-            return;
-        }
-        // System.out.println(
-        
-        byte[] user_bytes = user.getBytes();
-        byte[] t = {0x17};
-        byte[] command = joinByteArray(t, user_bytes);
-        sendCommand(command);
-    }
+    public static void newAccount(String user) {                        //[DEBUG]
+        if(user.indexOf(':', 0) != -1){                                 //[DEBUG]
+            return;                                                     //[DEBUG]
+        }                                                               //[DEBUG]
+        byte[] user_bytes = user.getBytes();                            //[DEBUG]
+        byte[] t = {0x17};                                              //[DEBUG]
+        byte[] command = joinByteArray(t, user_bytes);                  //[DEBUG]
+        sendCommand(command);                                           //[DEBUG]
+    }                                                                   //[DEBUG]
 
-    public static void dumpSecret(String user, String password) {
-        if(user.indexOf(':', 0) != -1){
-            return;
-        }
-        // System.out.println(
-        String auth_str = user+":"+password;
-        byte[] auth_bytes = auth_str.getBytes();
-        byte[] t = {0x17};
-        byte[] command = joinByteArray(t, auth_bytes);
-        sendCommand(command);
-    }
-
-    // public static void provisionAccount(String user) {
-    //     if(user.indexOf(':', 0) != -1){
-    //         return;
-    //     }
-    //     // System.out.println(
-    //     byte[] user_b = user.getBytes();
-    //     byte[] t = {0x4a};
-    //     byte[] command = joinByteArray(t, user_b);
-    //     sendCommand(command);
-    // }
+    public static void dumpSecret(String user, String password) {       
+        if(user.indexOf(':', 0) != -1){                                 
+            return;                                                     
+        }                                                               
+        String auth_str = user+":"+password;                            
+        byte[] auth_bytes = auth_str.getBytes();                        
+        byte[] t = {0x17};                                              
+        byte[] command = joinByteArray(t, auth_bytes);                  
+        sendCommand(command);                                           
+    }                                                                   
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -116,11 +102,11 @@ public class Client {
             String password = console.readLine();
             login(username, password);
         }
-        if (input.equals("NEW")) {
-            console.printf("user:");
-            String username = console.readLine();
-            newAccount(username);
-        }
+        if (input.equals("NEW")) {                      //[DEBUG]
+            console.printf("user:");                    //[DEBUG]
+            String username = console.readLine();       //[DEBUG]
+            newAccount(username);                       //[DEBUG]
+        }                                               //[DEBUG]
 
     }
 }

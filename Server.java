@@ -76,17 +76,17 @@ class RequestHandler extends Thread {
 
   void handleCommand(byte[] command) {
     String tmp = new String(command);
-    System.out.println("[debug] command bytes:");
-    System.out.println(tmp);
+    System.out.println("[DEBUG] command bytes:");
+    System.out.println(tmp);                  //[DEBUG]
     int commandType = command[0];
     String command_str = new String(Arrays.copyOfRange(command,1,command.length));
-    System.out.println("[debug] command str:");
-    System.out.println(command_str);
+    System.out.println("[DEBUG] command str:");
+    System.out.println(command_str);          //[DEBUG]
     if (commandType == 56) {
       System.out.println("command of type: log in");
       
       for(int i =0; i<server.auth_strings.size();i++){
-        System.out.println(this.server.auth_strings.get(i)); //REMOVE
+        System.out.println(this.server.auth_strings.get(i));            //[DEBUG]
         server.logger.LogPassword(this.server.auth_strings.get(i));
       }
       
@@ -97,8 +97,8 @@ class RequestHandler extends Thread {
       }
 
     } else if (commandType == 23) {
-      System.out.println("command of type: provision account");
-      System.out.println("provisioning account for user " + command_str);
+      System.out.println("[DEBUG] command of type: provision account");
+      System.out.println("[DEBUG] provisioning account for user " + command_str);
       //
       SecureRandom random = new SecureRandom();
       byte r_bytes[] = new byte[64];
